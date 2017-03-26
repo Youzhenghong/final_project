@@ -10,7 +10,7 @@ import org.apache.spark.serializer.KryoSerializer
 import org.apache.spark.sql._
 import org.apache.spark.{SparkConf, SparkContext}
 import utils._
-import feature.extractors.userMerchantFeatures
+import feature.extractors.{userFeatures, userMerchantFeatures}
 
 object appMain {
   def main(args: Array[String]): Unit = {
@@ -23,10 +23,7 @@ object appMain {
     var df = fileLoader.loadUserLog(sc)
     df.show()
 
-
-    userMerchantFeatures.userMerchant(df)
-
-
+    userFeatures.userItemCount(df)
 
 
   }
