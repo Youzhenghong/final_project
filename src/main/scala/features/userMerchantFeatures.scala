@@ -1,4 +1,4 @@
-package feature.extractors
+package features
 
 import org.apache.spark.sql.DataFrame
 
