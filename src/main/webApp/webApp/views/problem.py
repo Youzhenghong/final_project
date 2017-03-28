@@ -3,6 +3,6 @@ from flask import Blueprint, render_template
 problem = Blueprint('problem', __name__)
 
 
-@problem.route('/problems', methods=['POST', 'GET'])
+@problem.route('/problem', methods=['POST', 'GET'])
 def problems():
-    return "adsfasdf"
+    return render_template("problem.html")
