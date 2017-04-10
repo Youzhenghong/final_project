@@ -99,6 +99,7 @@ function update_progress(status_url, term) {
             if ('result' in data) {
                 var result = term.echo(data['result']);
                 var str = JSON.stringify(result, null, 4);
+                alert(str);
                 term.echo(str);
             }
             term.echo(data['state']);

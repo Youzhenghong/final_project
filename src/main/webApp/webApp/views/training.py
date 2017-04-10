@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template,redirect,url_for, request,jsonify
 import time
 import random,os
+from multiprocessing import Process, Pipe
 from webApp import celery
 from webApp import conn
 import subprocess
@@ -38,38 +39,36 @@ def taskstatus(task_id = 1, methods=['GET']):
         'state': task.state,
     }
     if(task.state == "SUCCESS"):
-        response['result'] = task.result
+        response['result'] = task.get()
     return jsonify(response)
 
 
-def getOutput(r, task_output):
-    rdp = os.fdopen(r)
-    while task_output.poll() is None:
-        info = rdp.readline()
-        print info
+def getOutput(rdp, f):
+    info = rdp.readline()
+    f.write(info)
 
 
 @celery.task(bind=True)
 def spark_job_task(self):
     r, w = os.pipe()
-    rdp = os.fdopen(r, 'r')
     wdp = os.fdopen(w, 'w')
+    rdp = os.fdopen(r,'r')
     task_output = subprocess.Popen('spark-submit \
             --class "SimpleApp" \
             --master local[4] \
-            /Users/youzhenghong/practice/scalasrc/target/scala-2.11/simple-project_2.11-1.0.jar', shell=True, stdout=wdp)
-    pid = os.fork()
-    if pid == 0:
-        getOutput(rdp, task_output)
+            /Users/youzhenghong/practice/scalasrc/target/scala-2.11/simple-project_2.11-1.0.jar', shell=True, stdout=subprocess.PIPE)
+    f = open('/Users/youzhenghong/log.txt', 'w')
+    while True:
+        output = task_output.stdout.readline()
+        if output == '' and task_output.poll() is not None:
+            break
+        if output:
+            f.write(output)
 
-
+    task_output.wait()
+    f.close()
     print ("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
-    return {'result': "completed"}
+    return {'result': task_output.communicate()[0]}
 
 
-
-
-
-# some helpful sense code:
-# http://sense.qbox.io/gist/4f7ed0e6aa51f6badd9d27de979741e4b8768205
 
