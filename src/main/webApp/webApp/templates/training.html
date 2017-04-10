@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
+  <script src="http://lib.sinaapp.com/js/jquery/1.9.1/jquery-1.9.1.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+  <script src="http://cdn.bootcss.com/bootstrap-table/1.9.1/bootstrap-table.min.js"></script>
+  <script src="http://cdn.bootcss.com/bootstrap-table/1.9.1/locale/bootstrap-table-zh-CN.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.terminal/1.0.15/js/jquery.terminal.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.terminal/1.0.15/css/jquery.terminal.min.css" rel="stylesheet"/>
+  <style>
+    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+    .row.content {height: 550px}
+
+    /* Set gray background color and 100% height */
+    .sidenav {
+      background-color: #f1f1f1;
+      height: 100%;
+    }
+
+    /* On small screens, set height to 'auto' for the grid */
+    @media screen and (max-width: 767px) {
+      .row.content {height: auto;}
+    }
+  </style>
+</head>
+<body>
+
+
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Final Project</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li><a href="#">Problem</a></li>
+        <li><a href="#">Visualization</a></li>
+        <li class="active"><a href="/training">Training</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container-fluid">
+  <div class="row content">
+    <div class="col-sm-2"></div>
+    <div class="col-sm-8">
+        <div id="term_demo"  style="height: 300px"></div>
+    </div>
+
+
+    <div class="col-sm-2"></div>
+  </div>
+</div>
+<script>
+
+$(function() {
+    $('#term_demo').terminal(function(command, term) {
+        term.pause();
+
+        $.ajax({
+                type: 'POST',
+                url: '/sparktask',
+                success: function(data, status, request) {
+                    status_url = request.getResponseHeader('Location');
+                    update_progress(status_url, term);
+                    //alert('fuck');
+                },
+                error: function() {
+                    alert('Unexpected error');
+                }
+            });
+
+
+    },{
+        greetings: 'Machine Learning Console',
+        prompt: 'my-shell >>',
+        height: 200
+    });
+});
+
+function update_progress(status_url, term) {
+    $.getJSON(status_url, function (data) {
+        //alert((data['state']));
+        if(data['state'] != 'PENDING' && data['state'] != 'STARTED') {
+            // alert(data['state']);
+            if ('result' in data) {
+                var result = term.echo(data['result']);
+                var str = JSON.stringify(result, null, 4);
+                term.echo(str);
+            }
+            term.echo(data['state']);
+            term.resume();
+        }
+        else {
+            term.echo(data['state']);
+            setTimeout(function () {
+                update_progress(status_url, term);
+            }, 200);
+        }
+    });
+}
+
+</script>
+
+</body>
+</html>

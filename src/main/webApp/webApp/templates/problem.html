@@ -5,8 +5,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
+  <script src="http://lib.sinaapp.com/js/jquery/1.9.1/jquery-1.9.1.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+  <script src="http://cdn.bootcss.com/bootstrap-table/1.9.1/bootstrap-table.min.js"></script>
+  <script src="http://cdn.bootcss.com/bootstrap-table/1.9.1/locale/bootstrap-table-zh-CN.min.js"></script>
+  <script src="../static/js/BootSideMenu.js"></script>
+  <link rel="stylesheet" href="../static/css/BootSideMenu.css">
   <style>
     /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
     .row.content {height: 550px}
@@ -25,6 +31,8 @@
 </head>
 <body>
 
+
+
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -39,7 +47,7 @@
       <ul class="nav navbar-nav">
         <li class="active"><a href="#">Problem</a></li>
         <li><a href="#">Visualization</a></li>
-        <li><a href="#">Training</a></li>
+        <li><a href="/training">Training</a></li>
       </ul>
     </div>
   </div>
@@ -50,88 +58,35 @@
     <div class="col-sm-2 sidenav hidden-xs">
       <h2>Introduction</h2>
       <ul class="nav nav-pills nav-stacked">
-        <li class="active"><a href="#section1">Background</a></li>
-        <li><a href="#section2">Solutions</a></li>
+        <li class="active" id="background"><a href="#section1">Background</a></li>
+        <li id="solution"><a href="#section2">Solutions</a></li>
       </ul>
       <h2>DataSet</h2>
       <ul class="nav nav-pills nav-stacked">
-        <li><a href="#section1">user profile</a></li>
-        <li><a href="#section2">user log</a></li>
-        <li><a href="#section3">training set</a></li>
-        <li><a href="#section3">test set</a></li>
+        <li id="profile"><a href="#section1">user profile</a></li>
+        <li id="log"><a href="#section2">user log</a></li>
+        <li id="training"><a href="#section3">training set</a></li>
+        <li id="test"><a href="#section3">test set</a></li>
       </ul>
     </div>
     <br>
 
     <div class="col-sm-10">
-      <div class="well">
-        <h4>Dashboard</h4>
-        <p>Some text..</p>
-      </div>
-      <div class="row">
-        <div class="col-sm-3">
-          <div class="well">
-            <h4>Users</h4>
-            <p>1 Million</p>
-          </div>
+        <div id="panel" class="col-sm-10"></div>
+        <div class="col-sm-10">
+            <ul class="pager" id="pagination">
+            </ul>
         </div>
-        <div class="col-sm-3">
-          <div class="well">
-            <h4>Pages</h4>
-            <p>100 Million</p>
-          </div>
-        </div>
-        <div class="col-sm-3">
-          <div class="well">
-            <h4>Sessions</h4>
-            <p>10 Million</p>
-          </div>
-        </div>
-        <div class="col-sm-3">
-          <div class="well">
-            <h4>Bounce</h4>
-            <p>30%</p>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-4">
-          <div class="well">
-            <p>Text</p>
-            <p>Text</p>
-            <p>Text</p>
-          </div>
-        </div>
-        <div class="col-sm-4">
-          <div class="well">
-            <p>Text</p>
-            <p>Text</p>
-            <p>Text</p>
-          </div>
-        </div>
-        <div class="col-sm-4">
-          <div class="well">
-            <p>Text</p>
-            <p>Text</p>
-            <p>Text</p>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-8">
-          <div class="well">
-            <p>Text</p>
-          </div>
-        </div>
-        <div class="col-sm-4">
-          <div class="well">
-            <p>Text</p>
-          </div>
-        </div>
-      </div>
+
     </div>
   </div>
 </div>
+<script src="../static/js/solution.js"></script>
+<script src="../static/js/background.js"></script>
+<script src="../static/js/testSet.js"></script>
+<script src="../static/js/trainingSet.js"></script>
+<script src="../static/js/userLog.js"></script>
+<script src="../static/js/userProfile.js"></script>
 
 </body>
 </html>
