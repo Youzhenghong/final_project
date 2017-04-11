@@ -1,10 +1,9 @@
 from flask import Blueprint, render_template,redirect,url_for, request,jsonify
-import time
-import random,os
-from multiprocessing import Process, Pipe
-from webApp import celery
-from webApp import conn
+
+from config import SPARK_MESSAGE_QUEUE as spark_messege_queue
+from webApp import celery, conn
 import subprocess
+import os, time
 training = Blueprint('training', __name__)
 
 
@@ -36,10 +35,14 @@ def sparktask():
 def taskstatus(task_id = 1, methods=['GET']):
     task = spark_job_task.AsyncResult(task_id)
     response = {
-        'state': task.state,
+        'task_state': task.state,
+        'info': ""
     }
-    if(task.state == "SUCCESS"):
-        response['result'] = task.get()
+    while not conn.isEmpty(spark_messege_queue):
+        info = conn.pop(spark_messege_queue)
+        response['info'] += info + "\n"
+
+    print response['info']
     return jsonify(response)
 
 
@@ -63,7 +66,7 @@ def spark_job_task(self):
         if output == '' and task_output.poll() is not None:
             break
         if output:
-            f.write(output)
+            conn.push(spark_messege_queue, output)
 
     task_output.wait()
     f.close()

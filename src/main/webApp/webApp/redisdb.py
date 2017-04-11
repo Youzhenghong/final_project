@@ -17,3 +17,24 @@ class ConctDB(object):
             return value
         else:
             return []
+    def initMessageQueue(self, queue_name):
+        self.conn.delete(queue_name)
+
+
+    def push(self, queue_name, item):
+        item = pickle.dumps(item)
+        self.conn.lpush(queue_name, item)
+
+    def pop(self, queue_name):
+        item = self.conn.rpop(queue_name)
+        item = pickle.loads(item)
+        return item
+
+    def isEmpty(self, queue_name):
+        if self.conn.llen(queue_name):
+            return False
+        else:
+            return True
+
+    def length(self, queue_name):
+        return self.conn.llen(queue_name)

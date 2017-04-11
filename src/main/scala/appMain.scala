@@ -10,7 +10,7 @@ import org.apache.spark.serializer.KryoSerializer
 import org.apache.spark.sql._
 import org.apache.spark.{SparkConf, SparkContext}
 import utils._
-
+import features.userFeatures
 object appMain {
   def main(args: Array[String]): Unit = {
     /*

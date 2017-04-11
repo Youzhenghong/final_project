@@ -4,7 +4,7 @@ package features
   * Created by youzhenghong on 21/03/2017.
   */
 import breeze.linalg.sum
-import feature.extractors.userMerchantFeatures
+import features.userMerchantFeatures
 import org.apache.spark.sql.DataFrame
 import utils.fileLoader
 import org.apache.spark.sql.functions._

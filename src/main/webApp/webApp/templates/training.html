@@ -75,6 +75,7 @@ $(function() {
                 url: '/sparktask',
                 success: function(data, status, request) {
                     status_url = request.getResponseHeader('Location');
+                    alert(status_url);
                     update_progress(status_url, term);
                     //alert('fuck');
                 },
@@ -93,20 +94,20 @@ $(function() {
 
 function update_progress(status_url, term) {
     $.getJSON(status_url, function (data) {
-        //alert((data['state']));
-        if(data['state'] != 'PENDING' && data['state'] != 'STARTED') {
-            // alert(data['state']);
-            if ('result' in data) {
-                var result = term.echo(data['result']);
-                var str = JSON.stringify(result, null, 4);
-                alert(str);
-                term.echo(str);
+        if ('info' in data) {
+            if (data['info'].length != 0) {
+                var info = data['info'].split('\n');
+                info.forEach(function (i) {
+                    if(i.length!=0){
+                        term.echo(i);
+                    }
+                })
             }
-            term.echo(data['state']);
+        }
+        if(data['task_state'] == 'SUCCESS'){
             term.resume();
         }
         else {
-            term.echo(data['state']);
             setTimeout(function () {
                 update_progress(status_url, term);
             }, 200);
