@@ -3,7 +3,7 @@ from flask import Blueprint, render_template,redirect,url_for, request,jsonify
 from config import SPARK_MESSAGE_QUEUE as spark_messege_queue
 from webApp import celery, conn
 import subprocess
-import os, time
+import os, time,json
 training = Blueprint('training', __name__)
 
 
@@ -53,14 +53,12 @@ def getOutput(rdp, f):
 
 @celery.task(bind=True)
 def spark_job_task(self):
-    r, w = os.pipe()
-    wdp = os.fdopen(w, 'w')
-    rdp = os.fdopen(r,'r')
+    time.sleep(3)
     task_output = subprocess.Popen('spark-submit \
             --class "SimpleApp" \
             --master local[4] \
             /Users/youzhenghong/practice/scalasrc/target/scala-2.11/simple-project_2.11-1.0.jar', shell=True, stdout=subprocess.PIPE)
-    f = open('/Users/youzhenghong/log.txt', 'w')
+
     while True:
         output = task_output.stdout.readline()
         if output == '' and task_output.poll() is not None:
@@ -69,9 +67,16 @@ def spark_job_task(self):
             conn.push(spark_messege_queue, output)
 
     task_output.wait()
-    f.close()
     print ("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
     return {'result': task_output.communicate()[0]}
 
 
 
+@training.route('/map/chinageojson', methods=['GET','POST'])
+def getChinaMap():
+    path = "/Users/youzhenghong/final_project/src/main/webApp/webApp/static/china.geojson"
+    print path
+    with open(path, 'r') as f:
+        geoJson = json.load(f)
+        print type(geoJson)
+        return jsonify(geoJson)

@@ -13,6 +13,9 @@
   <script src="http://cdn.bootcss.com/bootstrap-table/1.9.1/locale/bootstrap-table-zh-CN.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.terminal/1.0.15/js/jquery.terminal.min.js"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.terminal/1.0.15/css/jquery.terminal.min.css" rel="stylesheet"/>
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=2e15a956b2a2cbebf7b3b3a21c44007d"></script>
+
   <style>
     /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
     .row.content {height: 550px}
@@ -26,6 +29,20 @@
     /* On small screens, set height to 'auto' for the grid */
     @media screen and (max-width: 767px) {
       .row.content {height: auto;}
+    }
+    svg{
+    padding:0px 0px 0px 0px;
+    margin: 0px 0px 0px 0px;}
+    #chinamap {
+        height: 720px;
+        width: 100%;
+        margin: auto;
+    }
+    #term_div,#term_demo{
+        height: 100px;
+        width: 100%;
+        margin: auto;
+        padding: 0px 0px 0px 0px;
     }
   </style>
 </head>
@@ -45,7 +62,7 @@
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
-        <li><a href="#">Problem</a></li>
+        <li><a href="/problem">Problem</a></li>
         <li><a href="#">Visualization</a></li>
         <li class="active"><a href="/training">Training</a></li>
       </ul>
@@ -55,67 +72,17 @@
 
 <div class="container-fluid">
   <div class="row content">
+    <div class="col-sm-1"></div>
+    <div class="col-sm-10" id="chinamap"></div>
+    <div class="col-sm-1"></div>
     <div class="col-sm-2"></div>
-    <div class="col-sm-8">
-        <div id="term_demo"  style="height: 300px"></div>
+    <div class="col-sm-8" id="term_div">
+        <div id="term_demo"></div>
     </div>
-
-
     <div class="col-sm-2"></div>
   </div>
 </div>
-<script>
-
-$(function() {
-    $('#term_demo').terminal(function(command, term) {
-        term.pause();
-
-        $.ajax({
-                type: 'POST',
-                url: '/sparktask',
-                success: function(data, status, request) {
-                    status_url = request.getResponseHeader('Location');
-                    alert(status_url);
-                    update_progress(status_url, term);
-                    //alert('fuck');
-                },
-                error: function() {
-                    alert('Unexpected error');
-                }
-            });
-
-
-    },{
-        greetings: 'Machine Learning Console',
-        prompt: 'my-shell >>',
-        height: 200
-    });
-});
-
-function update_progress(status_url, term) {
-    $.getJSON(status_url, function (data) {
-        if ('info' in data) {
-            if (data['info'].length != 0) {
-                var info = data['info'].split('\n');
-                info.forEach(function (i) {
-                    if(i.length!=0){
-                        term.echo(i);
-                    }
-                })
-            }
-        }
-        if(data['task_state'] == 'SUCCESS'){
-            term.resume();
-        }
-        else {
-            setTimeout(function () {
-                update_progress(status_url, term);
-            }, 200);
-        }
-    });
-}
-
-</script>
-
+<script src="../static/js/console.js"></script>
+<script src="../static/js/datamap.js"></script>
 </body>
 </html>

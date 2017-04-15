@@ -11,8 +11,6 @@
 
   <script src="http://cdn.bootcss.com/bootstrap-table/1.9.1/bootstrap-table.min.js"></script>
   <script src="http://cdn.bootcss.com/bootstrap-table/1.9.1/locale/bootstrap-table-zh-CN.min.js"></script>
-  <script src="../static/js/BootSideMenu.js"></script>
-  <link rel="stylesheet" href="../static/css/BootSideMenu.css">
   <style>
     /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
     .row.content {height: 550px}
@@ -45,7 +43,7 @@
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Problem</a></li>
+        <li class="active"><a href="/problem">Problem</a></li>
         <li><a href="#">Visualization</a></li>
         <li><a href="/training">Training</a></li>
       </ul>
@@ -55,7 +53,7 @@
 
 <div class="container-fluid">
   <div class="row content">
-    <div class="col-sm-2 sidenav hidden-xs">
+    <div class="col-sm-2 sidenav hidden-xs" style="display: none" id="SelectionPanel">
       <h2>Introduction</h2>
       <ul class="nav nav-pills nav-stacked">
         <li class="active" id="background"><a href="#section1">Background</a></li>
@@ -87,6 +85,13 @@
 <script src="../static/js/trainingSet.js"></script>
 <script src="../static/js/userLog.js"></script>
 <script src="../static/js/userProfile.js"></script>
+<script>
+    $(document).ready(function () {
+        //alert("fuck");
+        $("#SelectionPanel").fadeIn(3000);
+    });
+
+</script>
 
 </body>
 </html>
