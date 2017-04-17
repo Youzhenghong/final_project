@@ -60,14 +60,16 @@ var mapOptions = {
 var map = new google.maps.Map(document.getElementById("chinamap"), mapOptions); //创建谷歌地图
 */
 
-var map = new AMap.Map('chinamap',{
-	resizeEnable: true,
-	zoom: 5,
-	center: [108.9398, 34.3416]
+$(function initMap() {
+	var map = new AMap.Map('chinamap',{
+		resizeEnable: true,
+		zoom: 5,
+		center: [108.9398, 34.3416]
+	});
 });
 
 
-var marker = new AMap.Marker({
-    position: [116.480983, 39.989628]
-});
-marker.setMap(map);
+var source = new EventSource('/training/result');
+source.onmessage = function (event) {
+	console.log(event.data);
+}

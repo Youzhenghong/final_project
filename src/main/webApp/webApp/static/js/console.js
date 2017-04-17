@@ -10,10 +10,10 @@ $(function() {
                 type: 'POST',
                 url: '/sparktask',
                 success: function(data, status, request) {
-                    status_url = request.getResponseHeader('Location');
+                    var status_url = request.getResponseHeader('Location');
+                    var task_id = request.getResponseHeader('task_id');
                     alert(status_url);
                     update_progress(status_url, term);
-                    //alert('fuck');
                 },
                 error: function() {
                     alert('Unexpected error');
@@ -40,6 +40,7 @@ function update_progress(status_url, term) {
                 })
             }
         }
+
         if(data['task_state'] == 'SUCCESS'){
             term.resume();
         }
@@ -50,3 +51,4 @@ function update_progress(status_url, term) {
         }
     });
 }
+

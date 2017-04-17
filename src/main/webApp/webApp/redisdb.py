@@ -38,3 +38,10 @@ class ConctDB(object):
 
     def length(self, queue_name):
         return self.conn.llen(queue_name)
+
+    def pubsub(self):
+        return self.conn.pubsub()
+
+    def publish(self, channel, data):
+        data = pickle.dumps(data)
+        self.conn.publish(channel, data)
