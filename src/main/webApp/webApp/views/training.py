@@ -102,7 +102,7 @@ def publish():
             'prob': random.random()
         }
         print data
-        conn.publish('result', data)
+        conn.publish('result', json.dumps(data))
         #time.sleep(1)
 
 
