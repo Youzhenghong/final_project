@@ -16,12 +16,14 @@ object userFeatures {
       val merchantAction = merchantActionCount(user_log)
       val categoryAction = categoryActionCount(user_log)
 
-
-      println("\n\n\n\n\n\n itemaction" + itemActionCount(user_log).count())
+      println("\n\n\n\n\n\n itemaction" + itemAction.count())
+      itemAction.show()
       println("\n\n\n\n\n\n")
-      println("\n\n\n\n\n\n merchantaction  " + merchantActionCount(user_log).count())
-      println("\n\n\n\n\n\n categoryaction"+ categoryActionCount(user_log).count())
+      println("\n\n\n\n\n\n merchantaction  " + merchantAction.count())
+      merchantAction.show()
+      println("\n\n\n\n\n\n categoryaction"+ categoryAction.count())
       //println("\n\n\n\n\n\n categoryaction")
+      categoryAction.show()
       println("\n\n\n\n\n\n")
       categoryAction
 
@@ -171,7 +173,7 @@ object userFeatures {
   }
 
 
-  def userAction(user_merchant : DataFrame) : DataFrame = {
+   def userActionCount(user_merchant : DataFrame) : DataFrame = {
       user_merchant.groupBy("user_id").sum("click_action", "favor_action", "purchase_action")
         .withColumnRenamed("sum(click_action)", "num_of_click")
         .withColumnRenamed("sum(favor_action)","num_of_favor")

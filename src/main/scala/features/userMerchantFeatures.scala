@@ -8,6 +8,7 @@ import org.apache.spark.sql.DataFrame
 object userMerchantFeatures {
   def userMerchant(df : DataFrame) : DataFrame = {
     val userMerchantAction = userMerchantActionCount(df)
+    userMerchantAction.show()
     userMerchantAction.cache()
 
     val click_action = {
@@ -40,7 +41,7 @@ object userMerchantFeatures {
   }
 
 
-  private def userMerchantActionCount(df : DataFrame) : DataFrame = {
+  def userMerchantActionCount(df : DataFrame) : DataFrame = {
     df.groupBy("user_id", "merchant_id", "action_type").count()
   }
 }

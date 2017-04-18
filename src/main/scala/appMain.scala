@@ -11,6 +11,8 @@ import org.apache.spark.sql._
 import org.apache.spark.{SparkConf, SparkContext}
 import utils._
 import features.userFeatures
+import features.userMerchantFeatures
+import features.merchantFeatures
 object appMain {
   def main(args: Array[String]): Unit = {
     /*
@@ -23,7 +25,10 @@ object appMain {
     df.show()
 
     //userFeatures.itemActionCount(df)
-    userFeatures.getUserFeatures(df)
+    //userFeatures.getUserFeatures(df)
+    var user_merchant_action = userMerchantFeatures.userMerchantActionCount(df)
+    var merchant_user_count = merchantFeatures.merchantUserCount(user_merchant_action)
+    merchant_user_count.show()
 
 
   }
