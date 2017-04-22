@@ -10,23 +10,26 @@ import utils.fileLoader
 import org.apache.spark.sql.functions._
 
 object userFeatures {
-    def getUserFeatures(user_log : DataFrame) : DataFrame = {
+    def getUserFeatures(user_log : DataFrame, user_merchant: DataFrame) : DataFrame = {
       user_log.cache()
       val itemAction = itemActionCount(user_log)
       val merchantAction = merchantActionCount(user_log)
       val categoryAction = categoryActionCount(user_log)
+      val userAction = userActionCount(user_merchant)
 
-      println("\n\n\n\n\n\n itemaction" + itemAction.count())
-      itemAction.show()
-      println("\n\n\n\n\n\n")
-      println("\n\n\n\n\n\n merchantaction  " + merchantAction.count())
-      merchantAction.show()
-      println("\n\n\n\n\n\n categoryaction"+ categoryAction.count())
+      //println("\n\n\n\n\n\n itemaction" + itemAction.count())
+      //itemAction.show()
+      //println("\n\n\n\n\n\n")
+      //println("\n\n\n\n\n\n merchantaction  " + merchantAction.count())
+      //merchantAction.show()
+      //println("\n\n\n\n\n\n categoryaction"+ categoryAction.count())
       //println("\n\n\n\n\n\n categoryaction")
-      categoryAction.show()
-      println("\n\n\n\n\n\n")
-      categoryAction
-
+      //categoryAction.show()
+      //println("\n\n\n\n\n\n")
+      //println("\n\n\n\n\n\n userAction    " + userAction.count())
+      val userFeatures = itemAction.join(merchantAction, Seq("user_id"), "LEFT")
+        .join(categoryAction, Seq("user_id"), "LEFT").join(itemAction, Seq("user_id"), "LEFT")
+      userFeatures
     }
 
 
